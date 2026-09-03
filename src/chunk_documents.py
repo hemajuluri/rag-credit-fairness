@@ -61,7 +61,7 @@ def chunk_file(filepath: Path) -> list[dict]:
 
 def build_all_chunks() -> list[dict]:
     all_chunks = []
-    for subdir in ["policy_docs", "case_examples"]:
+    for subdir in ["policy_docs"]:
         folder = DATA_DIR / subdir
         for md_file in sorted(folder.glob("*.md")):
             file_chunks = chunk_file(md_file)

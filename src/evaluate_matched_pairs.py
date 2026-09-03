@@ -105,8 +105,8 @@ def evaluate():
         case_a = pair["case_a"]
         case_b = pair["case_b"]
 
-        query_a = build_query_from_case(case_a["features"])
-        query_b = build_query_from_case(case_b["features"])
+        query_a = build_query_from_case(case_a["features"], decision=case_a["decision"])
+        query_b = build_query_from_case(case_b["features"], decision=case_b["decision"])
 
         res_a = retriever.retrieve(query_a, top_k=3)
         res_b = retriever.retrieve(query_b, top_k=3)

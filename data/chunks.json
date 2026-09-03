@@ -52,41 +52,5 @@
     "source_file": "fair_lending_fundamentals.md",
     "source_dir": "policy_docs",
     "chunk_id": 8
-  },
-  {
-    "text": "# Sample Applicant Cases (Synthetic)\n\nSynthetic, illustrative applicant cases for testing the retrieval and generation pipeline during development. These are NOT real applicant data \u2014 placeholders to validate the system end-to-end before running it against the dissertation's actual (already-anonymized) dataset in later weeks.",
-    "source_file": "sample_cases.md",
-    "source_dir": "case_examples",
-    "chunk_id": 9
-  },
-  {
-    "text": "## Case 1\n- Applicant: synthetic, gender=F\n- Decision: Denied\n- Top SHAP features: high debt-to-income ratio (0.42), short credit history (14 months), one delinquent account in past 12 months\n- Expected explanation should reference: DTI ratio, credit history length, delinquency \u2014 NOT proxy factors",
-    "source_file": "sample_cases.md",
-    "source_dir": "case_examples",
-    "chunk_id": 10
-  },
-  {
-    "text": "## Case 2\n- Applicant: synthetic, gender=M\n- Decision: Denied\n- Top SHAP features: high debt-to-income ratio (0.44), short credit history (16 months), one delinquent account in past 12 months\n- Note: near-identical risk profile to Case 1 \u2014 used as a matched pair to test explanation consistency across gender during the Week 5 fairness re-audit",
-    "source_file": "sample_cases.md",
-    "source_dir": "case_examples",
-    "chunk_id": 11
-  },
-  {
-    "text": "## Case 3\n- Applicant: synthetic, gender=F\n- Decision: Approved\n- Top SHAP features: low DTI ratio (0.18), long credit history (86 months), no delinquencies",
-    "source_file": "sample_cases.md",
-    "source_dir": "case_examples",
-    "chunk_id": 12
-  },
-  {
-    "text": "## Case 4\n- Applicant: synthetic, gender=M\n- Decision: Approved\n- Top SHAP features: low DTI ratio (0.19), long credit history (81 months), no delinquencies\n- Matched pair with Case 3 for the same consistency-check purpose",
-    "source_file": "sample_cases.md",
-    "source_dir": "case_examples",
-    "chunk_id": 13
-  },
-  {
-    "text": "## Usage note\nCases 1/2 and 3/4 are intentionally near-identical matched pairs across gender \u2014 this mirrors the dissertation's own matched-pair approach to isolating whether explanation *quality* differs by gender when the underlying *risk* doesn't.",
-    "source_file": "sample_cases.md",
-    "source_dir": "case_examples",
-    "chunk_id": 14
   }
 ]

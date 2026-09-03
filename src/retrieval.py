@@ -55,12 +55,13 @@ class DocumentRetriever:
         return results
 
 
-def build_query_from_case(top_features: list[dict]) -> str:
+def build_query_from_case(top_features: list[dict], decision: str = "denied") -> str:
     """Turn an applicant's top SHAP feature attributions into a natural-
     language retrieval query.
 
     top_features: list of dicts like
         [{"feature": "debt-to-income ratio", "value": "0.42", "direction": "high"}, ...]
+    decision: string indicating the application outcome, e.g. "approved" or "denied".
 
     This is what the real Day 6-7 generation pipeline will call before
     retrieving context for an actual applicant's explanation.
@@ -73,7 +74,7 @@ def build_query_from_case(top_features: list[dict]) -> str:
         direction = feat.get("direction", "")
         descriptions.append(f"{direction} {feat['feature']}".strip())
 
-    return f"Applicant denied due to: {', '.join(descriptions)}"
+    return f"Applicant {decision.lower()} due to: {', '.join(descriptions)}"
 
 
 if __name__ == "__main__":
@@ -81,12 +82,16 @@ if __name__ == "__main__":
     retriever = DocumentRetriever()
 
     # Simulate a query built from Case 1's SHAP features (from sample_cases.md)
-    query = build_query_from_case([
-        {"feature": "debt-to-income ratio", "value": "0.42", "direction": "high"},
-        {"feature": "credit history length", "value": "14 months", "direction": "short"},
-    ])
+    query = build_query_from_case(
+        [
+            {"feature": "debt-to-income ratio", "value": "0.42", "direction": "high"},
+            {"feature": "credit history length", "value": "14 months", "direction": "short"},
+        ],
+        decision="denied",
+    )
     print(f"Built query: {query}\n")
 
     results = retriever.retrieve(query, top_k=3)
     for r in results:
         print(f"[{r['score']:.3f}] {r['source_file']}: {r['text'][:100]}...")
+
