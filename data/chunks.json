@@ -24,33 +24,51 @@
     "chunk_id": 3
   },
   {
-    "text": "# Fair Lending Fundamentals (Reference Summary)\n\nThis is an original summary document written for this project's retrieval corpus \u2014 a plain-language reference on fair lending principles, not a reproduction of any regulatory text. Intended to give the RAG system realistic policy-style context to retrieve from.",
-    "source_file": "fair_lending_fundamentals.md",
+    "text": "# Approval Notice & Positive Feature Standards (Reference Summary)\n\nOriginal reference document for this project's retrieval corpus, describing standards and requirements for compliant credit approval notices and positive factor explanations.",
+    "source_file": "approval_underwriting_standards.md",
     "source_dir": "policy_docs",
     "chunk_id": 4
   },
   {
-    "text": "## Core principle\n\nLenders must evaluate creditworthiness using criteria that predict repayment ability, and must not base credit decisions on protected characteristics such as gender, race, religion, marital status, age, or national origin. Two forms of discrimination are generally recognized:\n\n- **Disparate treatment**: intentionally treating applicants differently based on a protected characteristic.\n- **Disparate impact**: a facially neutral policy that produces a significantly different outcome across protected groups, without a legitimate, non-discriminatory justification.",
-    "source_file": "fair_lending_fundamentals.md",
+    "text": "## Approval notice requirements\n\nWhen an application for credit is approved, the notice provided to the applicant should:\n- Highlight the **top positive financial factors** that supported the approval decision (e.g., low debt-to-income ratio, long established credit history, zero recent delinquencies)\n- Ensure **plain-language transparency** so applicants understand what financial behaviors contributed positively to their creditworthiness\n- Maintain **fidelity to the model decision**, ensuring that positive factors cited reflect the top positive feature attributions (SHAP values) from the underwriting classifier\n- Avoid **vague or generic statements** (such as \"applicant met minimum qualifications\") in favor of specific, verifiable financial metrics",
+    "source_file": "approval_underwriting_standards.md",
     "source_dir": "policy_docs",
     "chunk_id": 5
   },
   {
-    "text": "## What a compliant credit explanation should do\n\n1. **Identify the specific factors** that most influenced the decision (e.g., debt-to-income ratio, credit history length, payment delinquencies) \u2014 general or vague reasons are not considered adequate.\n2. **Avoid factors** that are proxies for protected characteristics (e.g., zip code used as a stand-in for race, or income patterns that correlate strongly with gender in ways unrelated to actual repayment risk).\n3. **Be consistent** across applicants with similar risk profiles \u2014 if two applicants with similar SHAP attribution patterns receive materially different explanation quality or tone, that inconsistency itself is a fairness signal worth auditing.",
-    "source_file": "fair_lending_fundamentals.md",
+    "text": "## Fair lending considerations for approval notifications\n\n- **Consistency across cohorts**: Approval notices must maintain consistent detail, professional tone, and plain language clarity across demographic groups.\n- **Prohibition of proxy or protected factors**: Approval notifications must never attribute positive decisions to demographic variables, location proxies, or non-financial attributes.\n- **Traceability**: All positive factors cited must be traceable directly to the underlying model's SHAP feature attributions.",
+    "source_file": "approval_underwriting_standards.md",
     "source_dir": "policy_docs",
     "chunk_id": 6
   },
   {
-    "text": "## Adverse action notices\n\nWhen an application is denied, applicants are generally entitled to specific reasons for the denial (not just \"did not meet credit criteria\"). Common accepted reason categories include: insufficient income, high debt-to-income ratio, limited credit history, delinquent past accounts, and excessive existing obligations relative to income.",
+    "text": "# Fair Lending Fundamentals (Reference Summary)\n\nThis is an original summary document written for this project's retrieval corpus \u2014 a plain-language reference on fair lending principles, not a reproduction of any regulatory text. Intended to give the RAG system realistic policy-style context to retrieve from.",
     "source_file": "fair_lending_fundamentals.md",
     "source_dir": "policy_docs",
     "chunk_id": 7
   },
   {
-    "text": "## Relevance to this project\n\nThis document exists in the retrieval corpus so the RAG system can ground generated explanations in these general principles \u2014 e.g., confirming that a generated explanation cites a specific, non-proxy factor rather than a vague or protected-characteristic-adjacent one.",
+    "text": "## Core principle\n\nLenders must evaluate creditworthiness using criteria that predict repayment ability, and must not base credit decisions on protected characteristics such as gender, race, religion, marital status, age, or national origin. Two forms of discrimination are generally recognized:\n\n- **Disparate treatment**: intentionally treating applicants differently based on a protected characteristic.\n- **Disparate impact**: a facially neutral policy that produces a significantly different outcome across protected groups, without a legitimate, non-discriminatory justification.",
     "source_file": "fair_lending_fundamentals.md",
     "source_dir": "policy_docs",
     "chunk_id": 8
+  },
+  {
+    "text": "## What a compliant credit explanation should do\n\n1. **Identify the specific factors** that most influenced the decision (e.g., debt-to-income ratio, credit history length, payment delinquencies) \u2014 general or vague reasons are not considered adequate.\n2. **Avoid factors** that are proxies for protected characteristics (e.g., zip code used as a stand-in for race, or income patterns that correlate strongly with gender in ways unrelated to actual repayment risk).\n3. **Be consistent** across applicants with similar risk profiles \u2014 if two applicants with similar SHAP attribution patterns receive materially different explanation quality or tone, that inconsistency itself is a fairness signal worth auditing.",
+    "source_file": "fair_lending_fundamentals.md",
+    "source_dir": "policy_docs",
+    "chunk_id": 9
+  },
+  {
+    "text": "## Adverse action notices\n\nWhen an application is denied, applicants are generally entitled to specific reasons for the denial (not just \"did not meet credit criteria\"). Common accepted reason categories include: insufficient income, high debt-to-income ratio, limited credit history, delinquent past accounts, and excessive existing obligations relative to income.",
+    "source_file": "fair_lending_fundamentals.md",
+    "source_dir": "policy_docs",
+    "chunk_id": 10
+  },
+  {
+    "text": "## Relevance to this project\n\nThis document exists in the retrieval corpus so the RAG system can ground generated explanations in these general principles \u2014 e.g., confirming that a generated explanation cites a specific, non-proxy factor rather than a vague or protected-characteristic-adjacent one.",
+    "source_file": "fair_lending_fundamentals.md",
+    "source_dir": "policy_docs",
+    "chunk_id": 11
   }
 ]
