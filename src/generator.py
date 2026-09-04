@@ -1,11 +1,13 @@
 """
 generator.py
 
-Day 6: RAG Generation Pipeline
+Day 6: RAG Generation Pipeline (Mistral-7B-Instruct Backend)
 
-Wires the DocumentRetriever (Days 4-5) into an LLM call to generate
-RAG-grounded, compliant credit decision explanations based on applicant
-SHAP feature attributions and retrieved policy documents.
+Wires the DocumentRetriever (Days 4-5) into a local Mistral-7B-Instruct call
+(via Ollama) to generate RAG-grounded, compliant credit decision explanations
+based on applicant SHAP feature attributions and retrieved policy documents.
+
+Model choice: Mistral-7B-Instruct (matching dissertation baseline & README.md).
 
 Compliance & Fairness Rules Enforced:
 1. Grounding: Explanation relies strictly on SHAP features and retrieved context.
@@ -14,28 +16,31 @@ Compliance & Fairness Rules Enforced:
 4. Determinism: Low temperature (0.0) is used for factual compliance text.
 """
 
+import json
 import os
+import urllib.request
 from pathlib import Path
-from google import genai
-from google.genai import types
 
 from retrieval import DocumentRetriever, build_query_from_case
 
-MODEL_NAME = "gemini-3.6-flash"
+MODEL_NAME = "mistral"
+OLLAMA_URL = "http://localhost:11434/api/generate"
 
 
 class ExplanationGenerator:
-    """Combines retrieval and LLM generation to produce grounded credit explanations."""
+    """Combines retrieval and local Mistral-7B generation to produce grounded credit explanations."""
 
-    def __init__(self, retriever: DocumentRetriever = None, model_name: str = MODEL_NAME, temperature: float = 0.0):
+    def __init__(
+        self,
+        retriever: DocumentRetriever = None,
+        model_name: str = MODEL_NAME,
+        temperature: float = 0.0,
+        ollama_url: str = OLLAMA_URL,
+    ):
         self.retriever = retriever or DocumentRetriever()
         self.model_name = model_name
         self.temperature = temperature
-        
-        api_key = os.environ.get("GEMINI_API_KEY")
-        if not api_key:
-            raise ValueError("GEMINI_API_KEY environment variable is missing.")
-        self.client = genai.Client(api_key=api_key)
+        self.ollama_url = ollama_url
 
     def _build_prompt(self, case: dict, retrieved_chunks: list[dict]) -> str:
         decision = case.get("decision", "Denied")
@@ -68,6 +73,32 @@ class ExplanationGenerator:
 Generate the official credit decision explanation below:"""
         return prompt
 
+    def _call_ollama(self, prompt: str) -> str:
+        payload = {
+            "model": self.model_name,
+            "prompt": prompt,
+            "stream": False,
+            "options": {
+                "temperature": self.temperature,
+            },
+        }
+
+        req = urllib.request.Request(
+            self.ollama_url,
+            data=json.dumps(payload).encode("utf-8"),
+            headers={"Content-Type": "application/json"},
+        )
+
+        try:
+            with urllib.request.urlopen(req) as response:
+                res_data = json.loads(response.read().decode("utf-8"))
+                return res_data.get("response", "").strip()
+        except Exception as e:
+            raise RuntimeError(
+                f"Failed to communicate with Ollama service at {self.ollama_url}. "
+                f"Make sure 'ollama serve' is running. Error: {e}"
+            )
+
     def generate_explanation(self, case: dict, top_k: int = 3) -> dict:
         decision = case.get("decision", "Denied")
         features = case.get("features", [])
@@ -77,15 +108,7 @@ Generate the official credit decision explanation below:"""
 
         prompt = self._build_prompt(case, retrieved_chunks)
 
-        response = self.client.models.generate_content(
-            model=self.model_name,
-            contents=prompt,
-            config=types.GenerateContentConfig(
-                temperature=self.temperature,
-            ),
-        )
-
-        explanation_text = response.text.strip()
+        explanation_text = self._call_ollama(prompt)
 
         return {
             "case_id": case.get("id", "Unknown"),
@@ -126,7 +149,7 @@ if __name__ == "__main__":
     }
 
     print("==================================================================")
-    print("DAY 6: END-TO-END RAG GENERATION TEST")
+    print("DAY 6: END-TO-END RAG GENERATION TEST (MISTRAL-7B-INSTRUCT)")
     print("==================================================================\n")
 
     for case in [test_case_denied, test_case_approved]:
@@ -134,8 +157,8 @@ if __name__ == "__main__":
         print(f"--- {result['case_id']} ({result['decision']}) ---")
         print(f"Query: {result['query']}")
         print("\nRetrieved Policy Chunks:")
-        for c in result['retrieved_chunks']:
+        for c in result["retrieved_chunks"]:
             print(f"  [{c['score']:.3f}] {c['source_file']}: {c['text'][:70]}...")
-        print("\nGenerated Explanation:")
-        print(result['explanation'])
+        print("\nGenerated Explanation (Mistral-7B):")
+        print(result["explanation"])
         print("\n" + "=" * 66 + "\n")
